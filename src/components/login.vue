@@ -5,20 +5,20 @@
       <img src="../assets/login/logo.png" alt="logo">
     </div>
     <!--登录-->
-    <form >
+    <form @submit.prevent='sendLogin' autocomplete="off">
       <div class="block">
         <div class="inp">
           <img src="../assets/login/user.png" alt="user">
-          <input type="number" placeholder="请输入手机号" maxlength="11">
+          <input type="number" placeholder="请输入手机号" maxlength="11" ref="userName">
         </div>
         <div class="h1"></div>
         <div class="inp">
           <img src="../assets/login/password.png" alt="pwd">
-          <input type="password" placeholder="请输入密码" maxlength="18">
+          <input type="password" placeholder="请输入密码" maxlength="18" ref="passWord">
           <img src="../assets/login/close.png" alt="x" id="close">
         </div>
       </div>
-      <input type="button" value="登录">
+      <input type="submit" value="登录">
     </form>
   </div>
   </div>
@@ -29,6 +29,26 @@ export default {
   name: 'login',
   data () {
     return {
+    }
+  },
+  created () {
+    let info = this.$local.fetch('user')
+    if (info.userName && info.passWord) {
+      this.$router.push('/list')
+    }
+  },
+  methods: {
+    sendLogin () {
+      let userName = this.$refs.userName.value
+      let passWord = this.$refs.passWord.value
+      this.$local.save('user', {
+        login: true,
+        userName: userName,
+        passWord: passWord
+      })
+      if (userName && passWord) {
+        this.$router.push('/list')
+      }
     }
   }
 }
@@ -120,7 +140,7 @@ html,body{
       padding: 0 15px;
       display: none;
     }
-    input[type="button"]{
+    input[type="submit"]{
       height: 40px;
       line-height: 40px;
       background: #8ec31f;
